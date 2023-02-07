@@ -40,7 +40,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def load_images(source_path: pathlib.Path):
+def load_images(source_path: pathlib.Path) -> Image.Image:
     images = []
     for file_path in source_path.iterdir():
         try:
@@ -55,7 +55,7 @@ def load_images(source_path: pathlib.Path):
     return images
 
 
-def get_board_size(images):
+def get_board_size(images: Image.Image) -> tuple[int, int]:
     max_resolution = max([image.size[0] for image in images])
     number_of_images = len(images)
     if args.r is not None:
@@ -66,17 +66,17 @@ def get_board_size(images):
     return (board_size, board_size)
 
 
-def check_if_board_squared(images):
+def check_if_board_squared(images: Image.Image) -> None:
     if not sqrt(len(images)).is_integer():
         raise ValueError("Number of image files is not square of 2")
 
 
-def provide_result_dir(dir_name):
+def provide_result_dir(dir_name: str) -> None:
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
 
 
-def get_random_positions(board_resolution):
+def get_random_positions(board_resolution: int) -> list[tuple[int, int]]:
     images_positions = [
         position
         for position in product(range(board_resolution), range(board_resolution))
@@ -86,7 +86,12 @@ def get_random_positions(board_resolution):
     return images_positions
 
 
-def dispose_images(board_image, board_resolution, images, image_size) -> Image.Image:
+def dispose_images(
+    board_image: Image.Image,
+    board_resolution: int,
+    images: Image.Image,
+    image_size: int,
+) -> Image.Image:
     images_positions = get_random_positions(board_resolution)
     for image, image_position in zip(images, images_positions):
         if args.s != 1 or args.r is not None:
@@ -97,7 +102,7 @@ def dispose_images(board_image, board_resolution, images, image_size) -> Image.I
     return board_image
 
 
-def create_boards():
+def create_boards() -> None:
     source_path = args.d
     images = load_images(source_path)
     check_if_board_squared(images)
