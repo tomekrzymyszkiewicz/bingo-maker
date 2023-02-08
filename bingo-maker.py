@@ -115,7 +115,6 @@ def create_boards() -> None:
         print(f"Board {board_file_name}")
         image = Image.new("RGB", board_size, (250, 250, 250))
         image = dispose_images(image, board_resolution, images, image_size)
-        image.show()
         image.save(f"bingo-boards/{board_file_name}")
 
 
